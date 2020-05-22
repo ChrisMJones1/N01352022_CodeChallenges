@@ -10,6 +10,9 @@ const onLoad = () => {
 
   const inputFour = document.getElementById("challenge-4");
   inputFour.addEventListener('click', challengeFour);
+
+  const inputFive = document.getElementById("challenge-5");
+  inputFive.addEventListener('click', challengeFive);
 }
 
 window.addEventListener('load', onLoad);
@@ -115,5 +118,63 @@ const challengeFour = () => {
 
 
   output.innerHTML = `Does the string: ${t} contain a cyclic shift of ${s} ? ${answer}`;
+
+}
+
+const challengeFive = () => {
+  let output = document.getElementById("challenge-5-output")
+  const input1 = document.getElementById("challenge-5-input-1");
+  let splits = (input1.value).split('\n');
+  const M = parseInt(splits.shift());
+  const N = parseInt(splits.shift());
+  let e = M * N;
+
+
+  for(let i = 0; i < splits.length; i++) {
+    splits[i] = splits[i].split(' ').map(number => parseInt(number));
+  }
+
+
+
+  let steps = [];
+
+  for(let i = 0; i < splits.length; i++) {
+    for(let j = 0; j < splits[i].length; j++) {
+      if(splits[i][j] === e) {
+        if(i + j === 0) {
+          output.innerHTML = `Can you escape this escape room? <span style='color: green; font-weight: bold; font-size: 2rem;'>Yes!</span> Nice escape, you escaping, uh, escapist?`;
+          return;
+        }
+        steps.push((i + 1) * (j + 1));
+      }
+    }
+  }
+
+  let l = steps.length;
+
+  if(l === 0) {
+    output.innerHTML = "Can you escape this escape room? <span style='color: red; font-weight: bold; font-size: 2rem;'>No.</span> Spend the rest of eternity reflecting on all the actions and decisions that led you here and despair.";
+    return;
+  }
+
+  while(l > 0) {
+    e = steps.shift();
+    for(let i = 0; i < splits.length; i++) {
+      for(let j = 0; j < splits[i].length; j++) {
+        if(splits[i][j] === e) {
+          if(i * j === 0) {
+            output.innerHTML = `Can you escape this escape room? <span style='color: green; font-weight: bold; font-size: 2rem;'>Yes!</span> Nice escape, you escaping, uh, escapist?`;
+            return;
+          }
+          steps.push((i + 1) * (j + 1));
+          l++;
+        }
+      }
+    }
+    l--;
+  }
+
+  output.innerHTML = "Can you escape this escape room? <span style='color: red; font-weight: bold; font-size: 2rem;'>No.</span> <span style='font-style: italic;'>Spend the rest of eternity reflecting on all the actions and decisions that led you here and despair.</span>";
+
 
 }
